@@ -18,7 +18,7 @@ RUN mkdir -p /home/ros_catkin_ws/src && \
 	echo "export ROS_PACKAGE_PATH=\${ROS_PACKAGE_PATH}:/home/ros_catkin_ws" >> ~/.bashrc && \
 	echo "export ROS_WORKSPACE=/home/ros_catkin_ws" >> ~/.bashrc && \
 	echo "function cmk(){\n	lastpwd=\$OLDPWD \n	cpath=\$(pwd) \n	cd /home/ros_catkin_ws \n	catkin_make \$@ \n	cd \$cpath \n	OLDPWD=\$lastpwd \n}" >> ~/.bashrc
-########## CUDA nvidia-docker ##########
+########## CUDA 8.0 nvidia-docker ##########
 RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates apt-transport-https gnupg-curl && \
 	rm -rf /var/lib/apt/lists/* && \
 	NVIDIA_GPGKEY_SUM=d1be581509378368edeec8c1eb2958702feedf3bc3d17011adbf24efacce4ab5 && \
@@ -58,6 +58,25 @@ ENV LD_LIBRARY_PATH /usr/local/nvidia/lib:/usr/local/nvidia/lib64
 ENV NVIDIA_VISIBLE_DEVICES all
 ENV NVIDIA_DRIVER_CAPABILITIES compute,utility
 ENV NVIDIA_REQUIRE_CUDA "cuda>=8.0"
+
+# devel
+RUN apt-get update && apt-get install -y --no-install-recommends \
+		cuda-core-$CUDA_PKG_VERSION \
+		cuda-misc-headers-$CUDA_PKG_VERSION \
+		cuda-command-line-tools-$CUDA_PKG_VERSION \
+		cuda-nvrtc-dev-$CUDA_PKG_VERSION \
+		cuda-nvml-dev-$CUDA_PKG_VERSION \
+		cuda-nvgraph-dev-$CUDA_PKG_VERSION \
+		cuda-cusolver-dev-$CUDA_PKG_VERSION \
+		cuda-cublas-dev-8-0=8.0.61.2-1 \
+		cuda-cufft-dev-$CUDA_PKG_VERSION \
+		cuda-curand-dev-$CUDA_PKG_VERSION \
+		cuda-cusparse-dev-$CUDA_PKG_VERSION \
+		cuda-npp-dev-$CUDA_PKG_VERSION \
+		cuda-cudart-dev-$CUDA_PKG_VERSION \
+		cuda-driver-dev-$CUDA_PKG_VERSION && \
+		rm -rf /var/lib/apt/lists/*
+ENV LIBRARY_PATH /usr/local/cuda/lib64/stubs
 ########## Eigen 3.3.7 ##########
 RUN	mkdir /home/eigen_ws && \
 	cd /home/eigen_ws && \
