@@ -119,8 +119,8 @@ RUN	mkdir /home/pcl_ws && \
 	mkdir build && \
 	cd build && \
 	cmake -DCMAKE_BUILD_TYPE=Release -D BUILD_CUDA=ON -D BUILD_GPU=ON -D WITH_CUDA=ON -D WITH_PCAP=ON .. && \
-	make -j12 && \
-	make -j12 install
+	make -j8 && \
+	make install
 ########## tf & pcl-ros ##########
 RUN	apt-get update && apt-get install -y \
 		ros-kinetic-tf \
