@@ -19,6 +19,7 @@ RUN mkdir -p /home/ros_catkin_ws/src && \
 	echo "export ROS_WORKSPACE=/home/ros_catkin_ws" >> ~/.bashrc && \
 	echo "function cmk(){\n	lastpwd=\$OLDPWD \n	cpath=\$(pwd) \n	cd /home/ros_catkin_ws \n	catkin_make \$@ \n	cd \$cpath \n	OLDPWD=\$lastpwd \n}" >> ~/.bashrc
 ########## CUDA 8.0 nvidia-docker ##########
+## runtime ver.
 RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates apt-transport-https gnupg-curl && \
 	rm -rf /var/lib/apt/lists/* && \
 	NVIDIA_GPGKEY_SUM=d1be581509378368edeec8c1eb2958702feedf3bc3d17011adbf24efacce4ab5 && \
@@ -59,7 +60,7 @@ ENV NVIDIA_VISIBLE_DEVICES all
 ENV NVIDIA_DRIVER_CAPABILITIES compute,utility
 ENV NVIDIA_REQUIRE_CUDA "cuda>=8.0"
 
-# devel
+## devel ver.
 RUN apt-get update && apt-get install -y --no-install-recommends \
 		cuda-core-$CUDA_PKG_VERSION \
 		cuda-misc-headers-$CUDA_PKG_VERSION \
@@ -99,6 +100,16 @@ RUN	mkdir /home/flann_ws && \
 	make install
 ########## Open GL ##########
 RUN	apt-get update && apt-get install -y freeglut3-dev
+########## VTK 8.2.0 ##########
+# RUN	mkdir /home/vtk_ws && \
+# 	cd /home/flann_ws && \
+# 	wget https://www.vtk.org/files/release/8.2/VTK-8.2.0.zip && \
+# 	unzip VTK-8.2.0.zip && \
+# 	cd VTK-8.2.0 && \
+# 	mkdir build && \
+# 	cd build && \
+# 	cmake .. && \
+# 	make install
 ########## PCL 1.9.1 ##########
 RUN	mkdir /home/pcl_ws && \
 	cd /home/pcl_ws && \
@@ -108,8 +119,8 @@ RUN	mkdir /home/pcl_ws && \
 	mkdir build && \
 	cd build && \
 	cmake -DCMAKE_BUILD_TYPE=Release -D BUILD_CUDA=ON -D BUILD_GPU=ON -D WITH_CUDA=ON -D WITH_PCAP=ON .. && \
-	make -j2 && \
-	make -j2 install
+	make -j12 && \
+	make -j12 install
 ########## tf & pcl-ros ##########
 RUN	apt-get update && apt-get install -y \
 		ros-kinetic-tf \
