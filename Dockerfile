@@ -101,15 +101,15 @@ RUN	mkdir /home/flann_ws && \
 ########## Open GL ##########
 RUN	apt-get update && apt-get install -y freeglut3-dev
 ########## VTK 8.2.0 ##########
-# RUN	mkdir /home/vtk_ws && \
-# 	cd /home/flann_ws && \
-# 	wget https://www.vtk.org/files/release/8.2/VTK-8.2.0.zip && \
-# 	unzip VTK-8.2.0.zip && \
-# 	cd VTK-8.2.0 && \
-# 	mkdir build && \
-# 	cd build && \
-# 	cmake .. && \
-# 	make install
+RUN	mkdir /home/vtk_ws && \
+	cd /home/flann_ws && \
+	wget https://www.vtk.org/files/release/8.2/VTK-8.2.0.zip && \
+	unzip VTK-8.2.0.zip && \
+	cd VTK-8.2.0 && \
+	mkdir build && \
+	cd build && \
+	cmake .. && \
+	make install
 ########## PCL 1.9.1 ##########
 RUN	mkdir /home/pcl_ws && \
 	cd /home/pcl_ws && \
@@ -118,17 +118,23 @@ RUN	mkdir /home/pcl_ws && \
 	cd pcl-pcl-1.9.1 && \
 	mkdir build && \
 	cd build && \
-	cmake -DCMAKE_BUILD_TYPE=Release -D BUILD_CUDA=ON -D BUILD_GPU=ON -D WITH_CUDA=ON -D WITH_PCAP=ON .. && \
+	# cmake -DCMAKE_BUILD_TYPE=Release -D BUILD_CUDA=ON -D BUILD_GPU=ON -D WITH_CUDA=ON -D WITH_PCAP=ON .. && \
+	cmake .. && \
 	make -j8 && \
 	make install
 ########## tf & pcl-ros ##########
+# RUN	apt-get update && apt-get install -y \
+# 		ros-kinetic-tf \
+# 		ros-kinetic-pcl-ros
 RUN	apt-get update && apt-get install -y \
 		ros-kinetic-tf \
-		ros-kinetic-pcl-ros
+		ros-kinetic-pcl-conversions
 ########## Main ##########
+# RUN	cd /home/ros_catkin_ws/src && \
+# 	git clone https://github.com/ozakiryota/normal_estimation_pcl && \
+# 	cd /home/ros_catkin_ws && \
+# 	/bin/bash -c "source /opt/ros/kinetic/setup.bash; catkin_make"
 RUN	cd /home/ros_catkin_ws/src && \
-	git clone https://github.com/ozakiryota/normal_estimation_pcl && \
-	cd /home/ros_catkin_ws && \
-	/bin/bash -c "source /opt/ros/kinetic/setup.bash; catkin_make"
+	git clone https://github.com/ozakiryota/normal_estimation_pcl
 ######### initial position ##########
 WORKDIR /home/ros_catkin_ws
